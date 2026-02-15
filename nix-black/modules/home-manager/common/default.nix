@@ -5,6 +5,10 @@
   ...
 }:
 {
+  imports = [
+    ../programs/git
+  ];
+
   # Home-Manager configuration
   home = {
     username = userConfig.name;
@@ -20,7 +24,6 @@
 
   # Common packages
   home.packages = with pkgs; [
-    git
   ];
 
   # Zsh configuration

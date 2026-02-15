@@ -66,7 +66,7 @@
       "emacs-app"
       "firefox"
       "vscodium"
-      #"vlc"
+      "vlc"
     ];
   };
 }
