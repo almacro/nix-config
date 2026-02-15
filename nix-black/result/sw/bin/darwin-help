@@ -1,0 +1,2 @@
+#! /nix/store/nravshvfviv75plf26nwfwzg8ldl3z8s-bash-5.2p37/bin/bash -e
+open /nix/store/87h5n87bhi4zsy6zvyv8ibbqnddz1rzr-darwin-manual-html/share/doc/darwin/index.html
