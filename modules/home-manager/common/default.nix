@@ -33,6 +33,20 @@
     };
   };
 
+  # Session PATH
+  home.sessionPath = [
+    "$HOME/bin"
+    "$HOME/.cargo/bin"
+    "/usr/local/go/bin"
+    "/Applications/Tailscale.app/Contents/MacOS"
+  ];
+
+  # Shell aliases
+  programs.zsh.shellAliases = {
+    emacs = "/Applications/Emacs.app/Contents/MacOS/Emacs";
+    tssh = "/Applications/Tailscale.app/Contents/MacOS/Tailscale ssh";
+  };
+
   # Zsh configuration
   programs.zsh = {
     enable = true;
