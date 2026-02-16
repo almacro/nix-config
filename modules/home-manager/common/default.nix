@@ -21,9 +21,9 @@
   # Git configuration
   programs.git = {
     enable = true;
-    userName = userConfig.fullName;
-    userEmail = userConfig.email;
-    aliases = {
+    settings.user.name = userConfig.fullName;
+    settings.user.email = userConfig.email;
+    settings.alias = {
       co = "checkout";
       br = "branch";
       ci = "commit";
