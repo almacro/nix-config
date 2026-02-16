@@ -53,12 +53,20 @@
       }
     ];
 
-    initContent = ''
+  };
+
+  # Fzf
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  # Zsh extra init
+  programs.zsh.initContent = ''
       [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
       if [ -f "$HOME/.zprofile" ]; then
         source "$HOME/.zprofile"
       fi
     '';
-  };
 }
