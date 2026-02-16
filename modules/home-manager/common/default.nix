@@ -41,7 +41,6 @@
     gradle
 
     # Go
-    go
     gopls
 
     # Rust
@@ -61,11 +60,15 @@
   home.sessionPath = [
     "$HOME/bin"
     "$HOME/.cargo/bin"
+  ] ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
     "/Applications/Tailscale.app/Contents/MacOS"
   ];
 
-  # Shell aliases
-  programs.zsh.shellAliases = {
+  # Editor
+  home.sessionVariables.EDITOR = "vim";
+
+  # Shell aliases (macOS-specific)
+  programs.zsh.shellAliases = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     emacs = "/Applications/Emacs.app/Contents/MacOS/Emacs";
     tssh = "/Applications/Tailscale.app/Contents/MacOS/Tailscale ssh";
   };
