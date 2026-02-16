@@ -18,10 +18,12 @@
   # Nicely reload system units when changing configs
   systemd.user.startServices = lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) "sd-switch";
 
-  # Common packages
-  home.packages = with pkgs; [
-    git
-  ];
+  # Git configuration
+  programs.git = {
+    enable = true;
+    userName = userConfig.fullName;
+    userEmail = userConfig.email;
+  };
 
   # Zsh configuration
   programs.zsh = {
