@@ -23,6 +23,14 @@
     enable = true;
     userName = userConfig.fullName;
     userEmail = userConfig.email;
+    aliases = {
+      co = "checkout";
+      br = "branch";
+      ci = "commit";
+      st = "status";
+      unstage = "reset HEAD --";
+      last = "log -1 HEAD";
+    };
   };
 
   # Zsh configuration
