@@ -25,6 +25,8 @@
     tmux
     vim
     podman
+    gvproxy
+    krunkit
   ];
 
   # Networking / firewall

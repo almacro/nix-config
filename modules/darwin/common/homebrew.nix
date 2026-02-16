@@ -6,6 +6,10 @@
     onActivation.autoUpdate = false;
     onActivation.upgrade = true;
 
+    brews = [
+      "vfkit"
+    ];
+
     casks = [
       "emacs-app"
       "firefox"
