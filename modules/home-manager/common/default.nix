@@ -64,8 +64,11 @@
     "/Applications/Tailscale.app/Contents/MacOS"
   ];
 
-  # Editor
-  home.sessionVariables.EDITOR = "vim";
+  # Environment variables
+  home.sessionVariables = {
+    EDITOR = "vim";
+    JAVA_HOME = "${pkgs.jdk21}";
+  };
 
   # Shell aliases (macOS-specific)
   programs.zsh.shellAliases = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
@@ -95,20 +98,32 @@
 
   };
 
+  # Delta (git pager)
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+  };
+
   # Fzf
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
   };
 
+  # Direnv
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   # Zsh extra init
   programs.zsh.initContent = ''
-      [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+    [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
-      if [ -f "$HOME/.zprofile" ]; then
-        source "$HOME/.zprofile"
-      fi
-    '';
+    if [ -f "$HOME/.zprofile" ]; then
+      source "$HOME/.zprofile"
+    fi
+  '';
 
   # Enable home-manager
   programs.home-manager.enable = true;

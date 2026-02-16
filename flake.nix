@@ -109,13 +109,9 @@
         "Stellarbook" = mkDarwinConfiguration "Stellarbook" "almacro";
       };
 
-      homeConfigurations = {
-        "almacro@Blackbook" =
-          mkHomeConfiguration "aarch64-darwin" "almacro" "Blackbook";
-        "almacro@Stellarbook" =
-          mkHomeConfiguration "aarch64-darwin" "almacro" "Stellarbook";
-        # "almacro@blackfish" =
-        #   mkHomeConfiguration "x86_64-linux" "almacro" "blackfish";
-      };
+      # homeConfigurations = {
+      #   "almacro@blackfish" =
+      #     mkHomeConfiguration "x86_64-linux" "almacro" "blackfish";
+      # };
     };
 }
