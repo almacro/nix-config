@@ -43,7 +43,6 @@
     oh-my-zsh = {
       enable = true;
       plugins = [ "git" ];
-      theme = "starship";
     };
 
     initContent = ''
@@ -51,5 +50,10 @@
         source "$HOME/.zprofile"
       fi
     '';
+  };
+
+  # Starship prompt
+  programs.starship = {
+    enable = true;
   };
 }
