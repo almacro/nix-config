@@ -41,7 +41,7 @@
         "almacro" = {
           email = "alm4x1mu5@gmail.com";
           fullName = "Alfred Thompson";
-          gitKey = "CHANGEME";
+          gitKey = "CHANGEME"; # TODO: set GPG key for commit signing
           name = "almacro";
         };
       };
