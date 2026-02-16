@@ -65,8 +65,6 @@
   home.sessionPath = [
     "$HOME/bin"
     "$HOME/.cargo/bin"
-  ] ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
-    "/Applications/Tailscale.app/Contents/MacOS"
   ];
 
   # Environment variables
@@ -84,7 +82,6 @@
 
     shellAliases = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
       emacs = "/Applications/Emacs.app/Contents/MacOS/Emacs";
-      tssh = "/Applications/Tailscale.app/Contents/MacOS/Tailscale ssh";
     };
 
     oh-my-zsh = {
