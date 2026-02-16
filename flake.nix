@@ -68,7 +68,20 @@
             userConfig = users.${username};
             darwinModules = "${self}/modules/darwin";
           };
-          modules = [ ./hosts/${hostname} ];
+          modules = [
+            ./hosts/${hostname}
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = {
+                inherit inputs outputs;
+                userConfig = users.${username};
+                nhModules = "${self}/modules/home-manager";
+              };
+              home-manager.users.${username} = import ./home/${username}/${hostname};
+            }
+          ];
         };
 
       # Function for Home Manager configuration
