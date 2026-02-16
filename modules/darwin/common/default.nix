@@ -1,6 +1,7 @@
 {
   pkgs,
   userConfig,
+  hostname,
   ...
 }:
 {
@@ -25,7 +26,7 @@
   networking.applicationFirewall.enableStealthMode = true;
   networking.applicationFirewall.allowSigned = true;
   networking.applicationFirewall.allowSignedApp = true;
-  networking.computerName = "Blackbook";
+  networking.computerName = hostname;
 
   # Zsh
   programs.zsh.enable = true;
