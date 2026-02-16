@@ -100,9 +100,9 @@
         };
     in
     {
-      nixosConfigurations = {
-        blackfish = mkNixosConfiguration "blackfish" "almacro";
-      };
+      # nixosConfigurations = {
+      #   blackfish = mkNixosConfiguration "blackfish" "almacro";
+      # };
 
       darwinConfigurations = {
         "Blackbook" = mkDarwinConfiguration "Blackbook" "almacro";
@@ -111,8 +111,8 @@
       homeConfigurations = {
         "almacro@Blackbook" =
           mkHomeConfiguration "aarch64-darwin" "almacro" "Blackbook";
-        "almacro@blackfish" =
-          mkHomeConfiguration "x86_64-linux" "almacro" "blackfish";
+        # "almacro@blackfish" =
+        #   mkHomeConfiguration "x86_64-linux" "almacro" "blackfish";
       };
     };
 }
