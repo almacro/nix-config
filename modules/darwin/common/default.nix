@@ -51,6 +51,7 @@
 
   # Fonts
   fonts.packages = with pkgs; [
+    meslo-lgs-nf
     source-code-pro
     nerd-fonts.fira-code
     nerd-fonts.droid-sans-mono
