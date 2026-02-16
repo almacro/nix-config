@@ -23,13 +23,18 @@
     enable = true;
     settings.user.name = userConfig.fullName;
     settings.user.email = userConfig.email;
-    settings.alias = {
-      co = "checkout";
-      br = "branch";
-      ci = "commit";
-      st = "status";
-      unstage = "reset HEAD --";
-      last = "log -1 HEAD";
+    settings = {
+      init.defaultBranch = "main";
+      pull.rebase = true;
+      push.autoSetupRemote = true;
+      alias = {
+        co = "checkout";
+        br = "branch";
+        ci = "commit";
+        st = "status";
+        unstage = "reset HEAD --";
+        last = "log -1 HEAD";
+      };
     };
   };
 
@@ -70,18 +75,17 @@
     JAVA_HOME = "${pkgs.jdk21}";
   };
 
-  # Shell aliases (macOS-specific)
-  programs.zsh.shellAliases = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-    emacs = "/Applications/Emacs.app/Contents/MacOS/Emacs";
-    tssh = "/Applications/Tailscale.app/Contents/MacOS/Tailscale ssh";
-  };
-
   # Zsh configuration
   programs.zsh = {
     enable = true;
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+
+    shellAliases = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+      emacs = "/Applications/Emacs.app/Contents/MacOS/Emacs";
+      tssh = "/Applications/Tailscale.app/Contents/MacOS/Tailscale ssh";
+    };
 
     oh-my-zsh = {
       enable = true;
@@ -95,7 +99,6 @@
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
       }
     ];
-
   };
 
   # Delta (git pager)

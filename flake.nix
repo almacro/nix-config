@@ -46,18 +46,6 @@
         };
       };
 
-      # Function for NixOS system configuration
-      mkNixosConfiguration =
-        hostname: username:
-        nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs outputs hostname;
-            userConfig = users.${username};
-            nixosModules = "${self}/modules/nixos";
-          };
-          modules = [ ./hosts/${hostname} ];
-        };
-
       # Function for nix-darwin system configuration
       mkDarwinConfiguration =
         hostname: username:
@@ -84,34 +72,13 @@
           ];
         };
 
-      # Function for Home Manager configuration
-      mkHomeConfiguration =
-        system: username: hostname:
-        home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { inherit system; };
-          extraSpecialArgs = {
-            inherit inputs outputs;
-            userConfig = users.${username};
-            nhModules = "${self}/modules/home-manager";
-          };
-          modules = [
-            ./home/${username}/${hostname}
-          ];
-        };
     in
     {
-      # nixosConfigurations = {
-      #   blackfish = mkNixosConfiguration "blackfish" "almacro";
-      # };
-
       darwinConfigurations = {
         "Blackbook" = mkDarwinConfiguration "Blackbook" "almacro";
         "Stellarbook" = mkDarwinConfiguration "Stellarbook" "almacro";
       };
 
-      # homeConfigurations = {
-      #   "almacro@blackfish" =
-      #     mkHomeConfiguration "x86_64-linux" "almacro" "blackfish";
-      # };
+      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
     };
 }
