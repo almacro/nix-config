@@ -53,6 +53,14 @@
 
     # OpenTofu (open-source Terraform fork)
     opentofu
+
+    # Lisp
+    sbcl
+    guile
+
+    # Search tools
+    ripgrep
+    fd
   ];
 
   # Go configuration
@@ -104,11 +112,21 @@
     enableGitIntegration = true;
   };
 
+  # Bat (better cat)
+  programs.bat.enable = true;
+
+  # Eza (better ls)
+  programs.eza = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   # Fzf
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
   };
+
 
   # Direnv
   programs.direnv = {
