@@ -116,6 +116,9 @@
     nix-direnv.enable = true;
   };
 
+  # Powerlevel10k configuration
+  home.file.".p10k.zsh".source = ./p10k.zsh;
+
   # Zsh extra init
   programs.zsh.initContent = ''
     [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
