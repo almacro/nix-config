@@ -33,11 +33,34 @@
     };
   };
 
+  # Development toolchains
+  home.packages = with pkgs; [
+    # Java
+    jdk21
+    maven
+    gradle
+
+    # Go
+    go
+    gopls
+
+    # Rust
+    rustup
+
+    # OpenTofu (open-source Terraform fork)
+    opentofu
+  ];
+
+  # Go configuration
+  programs.go = {
+    enable = true;
+    env.GOPATH = "$HOME/.go";
+  };
+
   # Session PATH
   home.sessionPath = [
     "$HOME/bin"
     "$HOME/.cargo/bin"
-    "/usr/local/go/bin"
     "/Applications/Tailscale.app/Contents/MacOS"
   ];
 

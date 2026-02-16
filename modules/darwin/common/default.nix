@@ -19,6 +19,7 @@
     mg
     tmux
     vim
+    podman
   ];
 
   # Networking / firewall
