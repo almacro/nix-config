@@ -7,6 +7,7 @@
     onActivation.upgrade = true;
 
     brews = [
+      "podman"
       "vfkit"
     ];
 

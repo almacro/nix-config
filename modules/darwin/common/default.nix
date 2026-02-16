@@ -24,8 +24,6 @@
     mg
     tmux
     vim
-    podman
-    gvproxy
     krunkit
   ];
 
