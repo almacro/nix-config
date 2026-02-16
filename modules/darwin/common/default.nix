@@ -30,6 +30,8 @@
 
   # Zsh
   programs.zsh.enable = true;
+  environment.pathsToLink = [ "/share/zsh" ];
+  environment.systemPath = [ "/etc/profiles/per-user/${userConfig.name}/bin" ];
 
   # System settings
   system = {
