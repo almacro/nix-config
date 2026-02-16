@@ -9,6 +9,7 @@
     casks = [
       "emacs-app"
       "firefox"
+      "tigervnc"
       "vscodium"
       "vlc"
     ];
