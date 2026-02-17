@@ -61,6 +61,9 @@
     # Search tools
     ripgrep
     fd
+
+    # GitHub CLI
+    gh
   ];
 
   # Go configuration
