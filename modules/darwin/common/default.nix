@@ -24,7 +24,6 @@
     mg
     tmux
     vim
-    krunkit
   ];
 
   # Networking / firewall
