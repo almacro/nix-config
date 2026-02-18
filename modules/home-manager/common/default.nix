@@ -53,6 +53,7 @@
 
     # OpenTofu (open-source Terraform fork)
     opentofu
+    terragrunt
 
     # Lisp
     sbcl
