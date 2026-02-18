@@ -67,6 +67,7 @@
 
     # Graph visualization
     graphviz
+    plantuml
   ];
 
   # Go configuration
