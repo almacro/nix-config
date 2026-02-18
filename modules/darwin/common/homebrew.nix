@@ -6,6 +6,10 @@
     onActivation.autoUpdate = false;
     onActivation.upgrade = true;
 
+    brews = [
+      "python@3.14"
+    ];
+
     casks = [
       "emacs-app"
       "firefox"
