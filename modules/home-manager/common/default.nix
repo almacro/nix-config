@@ -69,6 +69,9 @@
     # Graph visualization
     graphviz
     plantuml
+
+    # Command runner
+    just
   ];
 
   # Go configuration
