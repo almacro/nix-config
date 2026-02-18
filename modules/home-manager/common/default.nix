@@ -64,6 +64,9 @@
 
     # GitHub CLI
     gh
+
+    # Graph visualization
+    graphviz
   ];
 
   # Go configuration
