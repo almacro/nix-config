@@ -17,6 +17,7 @@
       "vscodium"
       "vlc"
       "postico@1"
+      "dbeaver-community"
     ];
   };
 }
