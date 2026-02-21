@@ -16,6 +16,7 @@
       "tigervnc"
       "vscodium"
       "vlc"
+      "postico1"
     ];
   };
 }
