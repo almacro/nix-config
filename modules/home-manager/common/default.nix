@@ -72,6 +72,9 @@
 
     # Command runner
     just
+
+    # Network tools
+    wget
   ];
 
   # Go configuration
