@@ -1,7 +1,12 @@
-{ nhModules, ... }:
+{ nhModules, pkgs, ... }:
 {
   imports = [
     "${nhModules}/common"
+  ];
+
+  # Secrets management
+  home.packages = with pkgs; [
+    doppler
   ];
 
   # Tailscale
