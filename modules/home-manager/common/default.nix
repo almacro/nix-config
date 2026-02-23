@@ -75,6 +75,9 @@
 
     # Network tools
     wget
+
+    # Database clients
+    postgresql
   ];
 
   # Go configuration
