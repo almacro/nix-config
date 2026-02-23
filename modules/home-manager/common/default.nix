@@ -78,6 +78,9 @@
 
     # Database clients
     postgresql
+
+    # Kubernetes
+    kubectl
   ];
 
   # Go configuration
