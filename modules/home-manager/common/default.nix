@@ -81,6 +81,7 @@
 
     # Kubernetes
     kubectl
+    kubernetes-helm
   ];
 
   # Go configuration
