@@ -75,6 +75,7 @@
 
     # Network tools
     wget
+    lynx
 
     # Database clients
     postgresql
