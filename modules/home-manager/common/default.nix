@@ -83,6 +83,9 @@
     # Kubernetes
     kubectl
     kubernetes-helm
+
+    # PDF tools
+    poppler-utils
   ];
 
   # Go configuration
