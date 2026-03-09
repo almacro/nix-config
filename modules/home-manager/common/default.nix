@@ -48,6 +48,14 @@
     # Go
     gopls
 
+    # JavaScript / TypeScript
+    bun
+    deno
+    pnpm
+    typescript
+    nodePackages.prettier
+    nodePackages.eslint
+
     # Rust
     rustup
 
