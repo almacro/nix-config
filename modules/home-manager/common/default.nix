@@ -94,6 +94,7 @@
 
     # PDF tools
     poppler-utils
+    qpdf
   ];
 
   # Go configuration
