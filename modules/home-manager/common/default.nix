@@ -80,6 +80,7 @@
 
     # Command runner
     just
+    parallel
 
     # Network tools
     wget
