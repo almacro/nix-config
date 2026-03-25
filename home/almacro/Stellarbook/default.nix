@@ -7,6 +7,7 @@
   # Secrets management
   home.packages = with pkgs; [
     doppler
+    nodePackages_latest.graphite-cli
   ];
 
   # Tailscale
