@@ -8,6 +8,7 @@
   home.packages = with pkgs; [
     doppler
     nodePackages_latest.graphite-cli
+    codespell
   ];
 
   # Tailscale
