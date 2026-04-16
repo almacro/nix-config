@@ -96,6 +96,9 @@
     # PDF tools
     poppler-utils
     qpdf
+
+    # Shell tooling
+    shellcheck
   ];
 
   # Go configuration
