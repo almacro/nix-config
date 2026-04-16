@@ -9,6 +9,7 @@
     doppler
     nodePackages_latest.graphite-cli
     codespell
+    flyctl
   ];
 
   # Tailscale
