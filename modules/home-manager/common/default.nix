@@ -102,6 +102,9 @@
 
     # Plotting
     gnuplot
+
+    # Utilities
+    watch
   ];
 
   # Go configuration
