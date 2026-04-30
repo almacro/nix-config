@@ -99,6 +99,9 @@
 
     # Shell tooling
     shellcheck
+
+    # Plotting
+    gnuplot
   ];
 
   # Go configuration
