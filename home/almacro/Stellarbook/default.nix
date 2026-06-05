@@ -10,6 +10,10 @@
     graphite-cli
     codespell
     flyctl
+
+    # Databases
+    surrealdb
+    goose
   ];
 
   # Tailscale
