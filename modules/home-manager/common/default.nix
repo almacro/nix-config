@@ -105,6 +105,7 @@
 
     # Utilities
     watch
+    htop
   ];
 
   # Go configuration
