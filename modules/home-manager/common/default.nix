@@ -53,8 +53,8 @@
     deno
     pnpm
     typescript
-    nodePackages.prettier
-    nodePackages.eslint
+    prettier
+    eslint
 
     # Rust
     rustup
