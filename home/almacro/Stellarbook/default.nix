@@ -10,6 +10,7 @@
     graphite-cli
     codespell
     flyctl
+    biome
 
     # Databases
     surrealdb
