@@ -67,6 +67,8 @@
     sbcl
     guile
     leiningen
+    clojure
+    clojure-lsp
 
     # Protocol Buffers
     protobuf
