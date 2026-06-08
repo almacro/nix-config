@@ -66,6 +66,7 @@
     # Lisp
     sbcl
     guile
+    leiningen
 
     # Protocol Buffers
     protobuf
