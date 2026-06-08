@@ -67,6 +67,9 @@
     sbcl
     guile
 
+    # Protocol Buffers
+    protobuf
+
     # Search tools
     ripgrep
     fd
