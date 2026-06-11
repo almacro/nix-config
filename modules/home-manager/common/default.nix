@@ -155,6 +155,13 @@
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
       }
     ];
+
+    # Login-shell setup (Homebrew + podman). Lands in the
+    # home-manager-managed ~/.zprofile.
+    profileExtra = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin ''
+      eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+      export PATH=$PATH:/opt/podman/bin
+    '';
   };
 
   # Delta (git pager)
@@ -191,10 +198,6 @@
   # Zsh extra init
   programs.zsh.initContent = ''
     [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-
-    if [ -f "$HOME/.zprofile" ]; then
-      source "$HOME/.zprofile"
-    fi
   '';
 
   # Enable home-manager
