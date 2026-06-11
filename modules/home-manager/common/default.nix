@@ -112,6 +112,7 @@
     # Utilities
     watch
     htop
+    tree
   ];
 
   # Go configuration
