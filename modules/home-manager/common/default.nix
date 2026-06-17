@@ -115,6 +115,7 @@
     htop
     tree
     yq-go
+    yamllint
   ];
 
   # Go configuration
