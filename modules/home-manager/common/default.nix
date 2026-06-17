@@ -114,6 +114,7 @@
     watch
     htop
     tree
+    yq-go
   ];
 
   # Go configuration
