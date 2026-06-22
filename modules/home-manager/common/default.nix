@@ -91,6 +91,7 @@
     # Network tools
     wget
     lynx
+    nmap
 
     # Database clients
     postgresql
