@@ -49,6 +49,7 @@
     gopls
 
     # JavaScript / TypeScript
+    nodejs
     bun
     deno
     pnpm
@@ -83,6 +84,7 @@
     # Graph visualization
     graphviz
     plantuml
+    mermaid-cli
 
     # Command runner
     just
