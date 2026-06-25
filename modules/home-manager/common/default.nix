@@ -105,6 +105,10 @@
     poppler-utils
     qpdf
 
+    # Document conversion
+    pandoc
+    tectonic
+
     # Shell tooling
     shellcheck
 
