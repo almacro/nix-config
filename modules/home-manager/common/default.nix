@@ -135,12 +135,15 @@
   home.sessionPath = [
     "$HOME/bin"
     "$HOME/.cargo/bin"
+    "$HOME/.npm-global/bin"
   ];
 
   # Environment variables
   home.sessionVariables = {
     EDITOR = "vim";
     JAVA_HOME = "${pkgs.jdk21}";
+    # Use the Nix-managed mmdc for the npm-installed mermaid-filter
+    MERMAID_FILTER_CMD_MMDC = "${pkgs.mermaid-cli}/bin/mmdc";
   };
 
   # Zsh configuration
