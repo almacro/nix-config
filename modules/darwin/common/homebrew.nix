@@ -13,6 +13,7 @@
     casks = [
       "emacs-app"
       "firefox"
+      "krita"
       "tigervnc"
       "vscodium"
       "vlc"
