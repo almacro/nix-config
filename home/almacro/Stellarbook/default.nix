@@ -11,6 +11,7 @@
     codespell
     flyctl
     biome
+    spacectl
 
     # Databases
     surrealdb
