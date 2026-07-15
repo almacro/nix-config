@@ -60,6 +60,9 @@
     # Rust
     rustup
 
+    # Python
+    uv
+
     # OpenTofu (open-source Terraform fork)
     opentofu
     terragrunt
