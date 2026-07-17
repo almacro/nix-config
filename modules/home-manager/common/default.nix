@@ -105,6 +105,7 @@
     kubectl
     kubernetes-helm
     minikube
+    k9s
 
     # PDF tools
     poppler-utils
