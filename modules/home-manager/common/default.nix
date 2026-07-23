@@ -106,6 +106,7 @@
     kubernetes-helm
     minikube
     k9s
+    argocd
 
     # PDF tools
     poppler-utils
