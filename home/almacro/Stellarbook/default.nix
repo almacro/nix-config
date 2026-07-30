@@ -12,6 +12,7 @@
     flyctl
     biome
     spacectl
+    golangci-lint
 
     # Databases
     surrealdb
