@@ -13,6 +13,7 @@
     biome
     spacectl
     golangci-lint
+    natscli
 
     # Databases
     surrealdb
