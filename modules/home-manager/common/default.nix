@@ -73,6 +73,7 @@
     leiningen
     clojure
     clojure-lsp
+    racket
 
     # Protocol Buffers
     protobuf
