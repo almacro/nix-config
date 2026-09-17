@@ -6,9 +6,10 @@
     onActivation.autoUpdate = false;
     onActivation.upgrade = true;
 
-    brews = [
-      "python@3.14"
-    ];
+    # Python is provided by nix (pkgs.python314 in home-manager common) — the
+    # Homebrew python@3.14 bottle linked against a system libexpat missing a
+    # required symbol, breaking venv/ensurepip. cleanup = "zap" uninstalls it.
+    brews = [ ];
 
     casks = [
       "emacs-app"

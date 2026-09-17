@@ -61,6 +61,7 @@
     rustup
 
     # Python
+    python314
     uv
 
     # OpenTofu (open-source Terraform fork)
