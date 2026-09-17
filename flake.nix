@@ -5,6 +5,13 @@
     # Nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
+    # Fixed-revision nixpkgs for surgically bumping individual packages ahead
+    # of the main pin, without moving the whole system. Pinned to an explicit
+    # commit (not a branch) so `nix flake update` does not drift it.
+    # Currently supplies (see overlayNewerPackages below):
+    #   - mill 1.1.8  (main pin is 1.1.2)
+    nixpkgs-newer.url = "github:NixOS/nixpkgs/c7def046b9a883d46974757852106483d741586f";
+
     # Home manager
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -46,11 +53,23 @@
         };
       };
 
+      system = "aarch64-darwin";
+
+      # Surgical package pins: pull specific attrs from `nixpkgs-newer` so they
+      # land ahead of the main nixpkgs pin, with a blast radius of just these
+      # packages. Applied to the system pkgs, which home-manager reuses via
+      # useGlobalPkgs.
+      overlayNewerPackages = _final: _prev: {
+        inherit (inputs.nixpkgs-newer.legacyPackages.${system})
+          mill
+          ;
+      };
+
       # Function for nix-darwin system configuration
       mkDarwinConfiguration =
         hostname: username:
         darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
+          inherit system;
           specialArgs = {
             inherit inputs outputs hostname;
             userConfig = users.${username};
@@ -58,6 +77,7 @@
           };
           modules = [
             ./hosts/${hostname}
+            { nixpkgs.overlays = [ overlayNewerPackages ]; }
             home-manager.darwinModules.home-manager
             {
               home-manager.useGlobalPkgs = true;

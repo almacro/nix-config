@@ -44,6 +44,7 @@
     jdk21
     maven
     gradle
+    mill
 
     # Go
     gopls
