@@ -131,6 +131,7 @@
     tree
     yq-go
     yamllint
+    restic
   ];
 
   # Go configuration
