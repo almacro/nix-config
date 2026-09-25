@@ -75,6 +75,7 @@
     leiningen
     clojure
     clojure-lsp
+    babashka
     racket
 
     # Protocol Buffers
