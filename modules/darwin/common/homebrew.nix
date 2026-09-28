@@ -2,7 +2,12 @@
 {
   homebrew = {
     enable = true;
-    onActivation.cleanup = "zap";
+    # "none" (not "zap"): the pinned nix-darwin passes the bare `brew bundle
+    # --cleanup` flag for zap/uninstall, which Homebrew 7 disabled. "none"
+    # avoids that call. Trade-off: removing a brew/cask here no longer auto-
+    # uninstalls it (do `brew uninstall` by hand). Revisit when nixpkgs+darwin
+    # are bumped together (newer nix-darwin uses `brew bundle cleanup`).
+    onActivation.cleanup = "none";
     onActivation.autoUpdate = false;
     onActivation.upgrade = true;
 
