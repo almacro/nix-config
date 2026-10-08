@@ -15,6 +15,7 @@
     golangci-lint
     natscli
     sccache
+    actionlint
 
     # Databases
     surrealdb
