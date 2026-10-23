@@ -16,6 +16,7 @@
     natscli
     sccache
     actionlint
+    grafana-loki # provides the logcli binary
 
     # Databases
     surrealdb
