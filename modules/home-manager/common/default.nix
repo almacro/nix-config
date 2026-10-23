@@ -1,4 +1,5 @@
 {
+  config,
   userConfig,
   lib,
   pkgs,
@@ -138,7 +139,9 @@
   # Go configuration
   programs.go = {
     enable = true;
-    env.GOPATH = "$HOME/.go";
+    # Absolute path: Go's env file does NOT expand $HOME, so a literal
+    # "$HOME/.go" would be stored verbatim and break every go command.
+    env.GOPATH = "${config.home.homeDirectory}/.go";
   };
 
   # Session PATH
