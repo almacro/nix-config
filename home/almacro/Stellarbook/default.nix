@@ -17,6 +17,7 @@
     sccache
     actionlint
     grafana-loki # provides the logcli binary
+    temporal-cli # provides the temporal binary
 
     # Databases
     surrealdb
