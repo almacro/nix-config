@@ -20,6 +20,7 @@
     temporal-cli # provides the temporal binary
     ssm-session-manager-plugin # provides session-manager-plugin for aws ssm
     ipmitool
+    redfishtool
 
     # Databases
     surrealdb
