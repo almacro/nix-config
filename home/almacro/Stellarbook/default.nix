@@ -21,7 +21,6 @@
     ssm-session-manager-plugin # provides session-manager-plugin for aws ssm
     ipmitool
     redfishtool
-    openfortivpn
 
     # Databases
     surrealdb
