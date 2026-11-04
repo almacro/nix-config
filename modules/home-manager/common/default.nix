@@ -11,12 +11,18 @@ let
   # riscv64-elf-gcc uses) so scripts expecting either prefix just work.
   rvCrossGcc = pkgs.pkgsCross.riscv64-embedded.buildPackages.gcc;
   rvCrossBinutils = pkgs.pkgsCross.riscv64-embedded.buildPackages.binutils;
-  riscv64UnknownElfAliases = pkgs.runCommand "riscv64-unknown-elf-aliases" { } ''
+  # Bin-only view of the cross toolchain, exposing every tool under BOTH the
+  # nix-native riscv64-none-elf-* and the brew-style riscv64-unknown-elf-*
+  # names. Only bin symlinks (no share/info) — this avoids the install-info
+  # "START-INFO-DIR-ENTRY" failure the raw packages' info docs trigger when
+  # merged into the user environment. The real binaries stay in the closure.
+  riscv64ElfToolchain = pkgs.runCommand "riscv64-elf-toolchain" { } ''
     mkdir -p $out/bin
     for d in ${rvCrossGcc}/bin ${rvCrossBinutils}/bin; do
       for src in "$d"/riscv64-none-elf-*; do
         [ -e "$src" ] || continue
         b=$(basename "$src")
+        ln -sf "$src" "$out/bin/$b"
         ln -sf "$src" "$out/bin/''${b/riscv64-none-elf/riscv64-unknown-elf}"
       done
     done
@@ -101,9 +107,9 @@ in
 
     # RISC-V emulation + bare-metal cross toolchain
     qemu # includes qemu-system-riscv64
-    rvCrossGcc # riscv64-none-elf-gcc
-    rvCrossBinutils # riscv64-none-elf-{as,ld,objcopy,objdump,...}
-    riscv64UnknownElfAliases # + riscv64-unknown-elf-* aliases
+    # provides riscv64-none-elf-* AND riscv64-unknown-elf-* (gcc/binutils),
+    # bin-only to avoid the install-info failure from the raw packages' docs.
+    riscv64ElfToolchain
 
     # Search tools
     ripgrep
