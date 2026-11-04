@@ -5,6 +5,23 @@
   pkgs,
   ...
 }:
+let
+  # RISC-V bare-metal cross toolchain. Expose the nix-native riscv64-none-elf-*
+  # tools ALSO under the riscv64-unknown-elf-* names (the triple brew's
+  # riscv64-elf-gcc uses) so scripts expecting either prefix just work.
+  rvCrossGcc = pkgs.pkgsCross.riscv64-embedded.buildPackages.gcc;
+  rvCrossBinutils = pkgs.pkgsCross.riscv64-embedded.buildPackages.binutils;
+  riscv64UnknownElfAliases = pkgs.runCommand "riscv64-unknown-elf-aliases" { } ''
+    mkdir -p $out/bin
+    for d in ${rvCrossGcc}/bin ${rvCrossBinutils}/bin; do
+      for src in "$d"/riscv64-none-elf-*; do
+        [ -e "$src" ] || continue
+        b=$(basename "$src")
+        ln -sf "$src" "$out/bin/''${b/riscv64-none-elf/riscv64-unknown-elf}"
+      done
+    done
+  '';
+in
 {
   # Home-Manager configuration
   home = {
@@ -81,6 +98,12 @@
 
     # Protocol Buffers
     protobuf
+
+    # RISC-V emulation + bare-metal cross toolchain
+    qemu # includes qemu-system-riscv64
+    rvCrossGcc # riscv64-none-elf-gcc
+    rvCrossBinutils # riscv64-none-elf-{as,ld,objcopy,objdump,...}
+    riscv64UnknownElfAliases # + riscv64-unknown-elf-* aliases
 
     # Search tools
     ripgrep
