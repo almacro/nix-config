@@ -22,6 +22,13 @@
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    #  Let linux laptop follow NixOS
+    nixpkgs-nixos.url = "github:NixOS/nixpkgs/nixos-26.05";
+    home-manager-nixos = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs-nixos";
+    };
   };
 
   outputs =
@@ -30,6 +37,8 @@
       darwin,
       home-manager,
       nixpkgs,
+      nixpkgs-nixos,
+      home-manager-nixos,
       ...
     }@inputs:
     let
@@ -92,6 +101,29 @@
           ];
         };
 
+    mkNixosConfiguration = hostname: username: system:
+      nixpkgs-nixos.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs outputs hostname;
+          userConfig = users.${username};
+        };
+        modules = [
+          ./hosts/${hostname}
+          home-manager-nixos.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {
+              inherit inputs outputs;
+              userConfig = users.${username};
+              nhModules = "${self}/modules/home-manager";
+            };
+            home-manager.users.${username} = import ./home/${username}/${hostname};
+          }
+        ];
+      };
+
     in
     {
       darwinConfigurations = {
@@ -100,5 +132,10 @@
       };
 
       formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
+
+      nixosConfigurations.blackfish = mkNixosConfiguration "blackfish" "almacro" "x86_64-linux";
+
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
+
     };
 }
