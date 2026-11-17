@@ -14,6 +14,7 @@
   # --- Boot ---------------------------------------------------------------
   # vfkit boots an EFI disk; systemd-boot on the ESP is the simplest setup.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10; # cap retained boot entries
   # false is more robust on ARM UEFI: the firmware's EFI variable store isn't
   # always persistent, and systemd-boot still boots via the fallback path if
   # the variables are lost/recreated.
@@ -33,6 +34,17 @@
   # the unixgram/socket network backend). DHCP inside the guest.
   networking.hostName = hostname;
   networking.useDHCP = lib.mkDefault true;
+  # Advertise/resolve <hostname>.local over mDNS so the Mac can reach the VM
+  # by name (nixvm.local) without it, that name won't resolve.
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+    };
+  };
 
   # --- Nix ----------------------------------------------------------------
   nix.settings.experimental-features = [
@@ -41,14 +53,16 @@
   ];
 
   # --- Slim profile (keep the throwaway VM small) -------------------------
-  zramSwap.enable = true; # compressed RAM swap instead of a disk swap device
+  # mkDefault throughout so a future fat profile can override with plain
+  # values (no mkForce needed).
+  zramSwap.enable = lib.mkDefault true; # compressed RAM swap vs a disk device
   nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+    automatic = lib.mkDefault true;
+    dates = lib.mkDefault "weekly";
+    options = lib.mkDefault "--delete-older-than 7d";
   };
-  nix.settings.auto-optimise-store = true;
-  documentation.enable = false; # drop man/info/nixos docs from the closure
+  nix.settings.auto-optimise-store = lib.mkDefault true;
+  documentation.enable = lib.mkDefault false; # drop man/info/nixos docs
 
   # --- Users --------------------------------------------------------------
   users.users.${userConfig.name} = {
@@ -56,16 +70,20 @@
     description = userConfig.fullName;
     extraGroups = [ "wheel" ]; # sudo
     shell = pkgs.zsh;
-    # SSH login is key-only (public keys are safe to commit; this one is
-    # verified against ~/.ssh/id_ed25519_almacro).
+    # SSH login is key-only. Public keys are safe to commit; the comment is
+    # just a label (real email omitted — public repo). Verified against the
+    # private key ~/.ssh/id_ed25519_almacro.
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMssjPRMXKE0lVMdOu2XUK9iQqqgONnl0QSI6lkGka2r alm4x1mu5@gmail.com"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMssjPRMXKE0lVMdOu2XUK9iQqqgONnl0QSI6lkGka2r almacro@nixvm"
     ];
     # Console-login fallback for recovery if key/SSH access breaks. The hash
-    # lives ON THE VM, never in this repo. Create it after install, e.g.:
-    #   mkpasswd -m sha-512 | sudo tee /etc/secrets/almacro.hash
+    # lives ON THE VM, never in this repo. Create it after install:
+    #   sudo mkdir -p /etc/secrets
+    #   nix-shell -p mkpasswd --run 'mkpasswd -m sha-512' \
+    #     | sudo tee /etc/secrets/almacro.hash
     #   sudo chmod 600 /etc/secrets/almacro.hash
-    # If the file is absent the account stays key-only (no console password).
+    # If the file is absent, NixOS warns during activation and the account has
+    # no console password (key-only) — confirm this in your first switch output.
     hashedPasswordFile = "/etc/secrets/almacro.hash";
   };
   # The user has no password, so sudo must NOT prompt for one — otherwise wheel
@@ -79,8 +97,11 @@
   # --- Remote access ------------------------------------------------------
   services.openssh = {
     enable = true;
-    # Key-only: never accept passwords over SSH (the account has none anyway).
+    # Key-only. Disable BOTH password and keyboard-interactive: once a console
+    # hashedPasswordFile exists, keyboard-interactive would otherwise let SSH
+    # accept that password through PAM despite PasswordAuthentication = false.
     settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
   };
 
   environment.systemPackages = with pkgs; [
