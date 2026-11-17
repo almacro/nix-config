@@ -92,11 +92,46 @@
           ];
         };
 
+      # Function for a NixOS configuration (aarch64-linux guest, e.g. a VM
+      # running under vfkit on Apple Silicon). Reuses the shared home-manager
+      # `common` module; the darwin-only bits in it are guarded by isDarwin.
+      # NOTE: building this needs an aarch64-linux builder — easiest is to run
+      # `nixos-rebuild switch --flake .#<host>` from INSIDE the guest.
+      mkNixosConfiguration =
+        hostname: username:
+        nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = {
+            inherit inputs outputs hostname;
+            userConfig = users.${username};
+          };
+          modules = [
+            ./hosts/${hostname}
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = {
+                inherit inputs outputs;
+                userConfig = users.${username};
+                nhModules = "${self}/modules/home-manager";
+              };
+              home-manager.users.${username} = import ./home/${username}/${hostname};
+            }
+          ];
+        };
+
     in
     {
       darwinConfigurations = {
         "Blackbook" = mkDarwinConfiguration "Blackbook" "almacro";
         "Stellarbook" = mkDarwinConfiguration "Stellarbook" "almacro";
+      };
+
+      nixosConfigurations = {
+        # Apple Silicon NixOS guest running under vfkit. Rename "nixvm" to taste
+        # (and rename hosts/nixvm + home/almacro/nixvm to match).
+        "nixvm" = mkNixosConfiguration "nixvm" "almacro";
       };
 
       formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
