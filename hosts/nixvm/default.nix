@@ -35,12 +35,15 @@
     description = userConfig.fullName;
     extraGroups = [ "wheel" ]; # sudo
     shell = pkgs.zsh;
-    # TODO: set real auth BEFORE exposing the VM. Prefer an SSH key:
-    #   openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAA... you@host" ];
-    # or a hashed password (`mkpasswd -m sha-512`): hashedPassword = "...";
-    initialPassword = "changeme";
+    # Key-only login; no password is set on this account at all. Add/replace
+    # keys here as needed (public keys are safe to commit).
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMssjPRMXKE0lVMdOu2XUK9iQqqgONnl0QSI6lkGka2r alm4x1mu5@gmail.com"
+    ];
   };
-  security.sudo.wheelNeedsPassword = true;
+  # The user has no password, so sudo must NOT prompt for one — otherwise wheel
+  # members could never escalate. Acceptable for this throwaway VM.
+  security.sudo.wheelNeedsPassword = false;
 
   # zsh must be enabled system-wide to be a valid login shell (home-manager
   # common configures the interactive bits).
@@ -49,8 +52,8 @@
   # --- Remote access ------------------------------------------------------
   services.openssh = {
     enable = true;
-    # Tighten to key-only once authorizedKeys are set above.
-    settings.PasswordAuthentication = lib.mkDefault true;
+    # Key-only: never accept passwords over SSH (the account has none anyway).
+    settings.PasswordAuthentication = false;
   };
 
   environment.systemPackages = with pkgs; [
