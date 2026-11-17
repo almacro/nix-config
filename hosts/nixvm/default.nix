@@ -14,7 +14,10 @@
   # --- Boot ---------------------------------------------------------------
   # vfkit boots an EFI disk; systemd-boot on the ESP is the simplest setup.
   boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # false is more robust on ARM UEFI: the firmware's EFI variable store isn't
+  # always persistent, and systemd-boot still boots via the fallback path if
+  # the variables are lost/recreated.
+  boot.loader.efi.canTouchEfiVariables = false;
   # Apple Virtualization / vfkit exposes a virtio console as hvc0.
   boot.kernelParams = [ "console=hvc0" ];
 
@@ -67,7 +70,7 @@
     git
   ];
 
-  # Set to the NixOS release you install from; do NOT change casually after
-  # install (it governs stateful-data compatibility).
-  system.stateVersion = "25.05";
+  # The NixOS release you install from (26.05 ISO). Do NOT change after the
+  # first install — it governs stateful-data compatibility.
+  system.stateVersion = "26.05";
 }

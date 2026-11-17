@@ -92,22 +92,30 @@
           ];
         };
 
-      # Function for a NixOS configuration (aarch64-linux guest, e.g. a VM
-      # running under vfkit on Apple Silicon). Reuses the shared home-manager
-      # `common` module; the darwin-only bits in it are guarded by isDarwin.
-      # NOTE: building this needs an aarch64-linux builder — easiest is to run
-      # `nixos-rebuild switch --flake .#<host>` from INSIDE the guest.
+      # Function for a NixOS configuration. Parameterised by `system` and the
+      # `nixpkgs` / `homeManager` inputs so ONE helper serves both this
+      # unstable aarch64-linux vfkit VM and a stable-input host (which passes
+      # its own stable inputs, e.g. nixpkgs = inputs.nixpkgs-stable). Reuses the
+      # shared home-manager `common` module (darwin-only bits are isDarwin
+      # guarded). NOTE: building needs a builder for `system` — easiest is to
+      # run `nixos-rebuild switch --flake .#<host>` from INSIDE the guest.
       mkNixosConfiguration =
-        hostname: username:
+        {
+          system,
+          hostname,
+          username,
+          nixpkgs ? inputs.nixpkgs,
+          homeManager ? home-manager,
+        }:
         nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
+          inherit system;
           specialArgs = {
             inherit inputs outputs hostname;
             userConfig = users.${username};
           };
           modules = [
             ./hosts/${hostname}
-            home-manager.nixosModules.home-manager
+            homeManager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
@@ -131,7 +139,11 @@
       nixosConfigurations = {
         # Apple Silicon NixOS guest running under vfkit. Rename "nixvm" to taste
         # (and rename hosts/nixvm + home/almacro/nixvm to match).
-        "nixvm" = mkNixosConfiguration "nixvm" "almacro";
+        "nixvm" = mkNixosConfiguration {
+          system = "aarch64-linux";
+          hostname = "nixvm";
+          username = "almacro";
+        };
       };
 
       formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
