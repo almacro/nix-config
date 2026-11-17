@@ -70,11 +70,11 @@
     description = userConfig.fullName;
     extraGroups = [ "wheel" ]; # sudo
     shell = pkgs.zsh;
-    # SSH login is key-only. Public keys are safe to commit; the comment is
-    # just a label (real email omitted — public repo). Verified against the
-    # private key ~/.ssh/id_ed25519_almacro.
+    # SSH login is key-only. Public keys are safe to commit; the comment uses
+    # the GitHub noreply address (no personal email exposed). Verified against
+    # the private key ~/.ssh/id_ed25519_almacro.
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMssjPRMXKE0lVMdOu2XUK9iQqqgONnl0QSI6lkGka2r almacro@nixvm"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMssjPRMXKE0lVMdOu2XUK9iQqqgONnl0QSI6lkGka2r 27452+almacro@users.noreply.github.com"
     ];
     # Console-login fallback for recovery if key/SSH access breaks. The hash
     # lives ON THE VM, never in this repo. Create it after install:
