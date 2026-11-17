@@ -95,7 +95,7 @@
       # Function for a NixOS configuration. Parameterised by `system` and the
       # `nixpkgs` / `homeManager` inputs so ONE helper serves both this
       # unstable aarch64-linux vfkit VM and a stable-input host (which passes
-      # its own stable inputs, e.g. nixpkgs = inputs.nixpkgs-stable). Reuses the
+      # its own stable inputs, e.g. nixpkgs = inputs.nixpkgs-nixos). Reuses the
       # shared home-manager `common` module (darwin-only bits are isDarwin
       # guarded). NOTE: building needs a builder for `system` — easiest is to
       # run `nixos-rebuild switch --flake .#<host>` from INSIDE the guest.

@@ -41,8 +41,7 @@
     nssmdns4 = true;
     publish = {
       enable = true;
-      addresses = true;
-      workstation = true;
+      addresses = true; # publish A/AAAA for <hostname>.local (workstation not needed)
     };
   };
 
