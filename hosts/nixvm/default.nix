@@ -35,11 +35,17 @@
     description = userConfig.fullName;
     extraGroups = [ "wheel" ]; # sudo
     shell = pkgs.zsh;
-    # Key-only login; no password is set on this account at all. Add/replace
-    # keys here as needed (public keys are safe to commit).
+    # SSH login is key-only (public keys are safe to commit; this one is
+    # verified against ~/.ssh/id_ed25519_almacro).
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMssjPRMXKE0lVMdOu2XUK9iQqqgONnl0QSI6lkGka2r alm4x1mu5@gmail.com"
     ];
+    # Console-login fallback for recovery if key/SSH access breaks. The hash
+    # lives ON THE VM, never in this repo. Create it after install, e.g.:
+    #   mkpasswd -m sha-512 | sudo tee /etc/secrets/almacro.hash
+    #   sudo chmod 600 /etc/secrets/almacro.hash
+    # If the file is absent the account stays key-only (no console password).
+    hashedPasswordFile = "/etc/secrets/almacro.hash";
   };
   # The user has no password, so sudo must NOT prompt for one — otherwise wheel
   # members could never escalate. Acceptable for this throwaway VM.
