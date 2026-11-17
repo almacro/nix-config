@@ -1,10 +1,9 @@
-# PLACEHOLDER hardware configuration.
-#
-# Replace this file with the one generated INSIDE the vfkit VM after the first
-# NixOS install:  `nixos-generate-config` writes /etc/nixos/hardware-configuration.nix
-# — copy that here. The values below are typical for a vfkit guest (virtio-blk
-# disk => /dev/vda, ESP + ext4 root by label) and exist only so the flake
-# evaluates before the VM is installed.
+# Disk layout for the vfkit guest. Kept PERMANENTLY and by-label on purpose:
+# do NOT replace it with `nixos-generate-config` output, which pins UUIDs that
+# change whenever the disk image is recreated. Label-based mounts let the same
+# config boot a freshly recreated image — format the disk to match:
+#   ESP:  mkfs.fat -F32 -n ESP   /dev/vda1
+#   root: mkfs.ext4      -L nixos /dev/vda2
 {
   lib,
   modulesPath,
@@ -34,6 +33,8 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-label/ESP";
     fsType = "vfat";
+    # The ESP holds boot files; keep it non-world-readable.
+    options = [ "umask=0077" ];
   };
 
   swapDevices = [ ];

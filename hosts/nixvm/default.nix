@@ -7,7 +7,7 @@
 }:
 {
   imports = [
-    # Generated inside the VM at install time (see hardware-configuration.nix).
+    # Permanent, label-based disk layout — kept on purpose (see the file).
     ./hardware-configuration.nix
   ];
 
@@ -20,9 +20,17 @@
   boot.loader.efi.canTouchEfiVariables = false;
   # Apple Virtualization / vfkit exposes a virtio console as hvc0.
   boot.kernelParams = [ "console=hvc0" ];
+  # Ensure a login prompt on that virtio console (console=hvc0 alone does not
+  # guarantee a getty is spawned on hvc0).
+  systemd.services."serial-getty@hvc0" = {
+    enable = true;
+    wantedBy = [ "getty.target" ];
+  };
 
   # --- Networking ---------------------------------------------------------
-  # vfkit provides NAT networking (via gvproxy); DHCP inside the guest.
+  # With vfkit's `--device virtio-net,nat` the guest gets NAT from Apple's
+  # Virtualization framework directly (NOT gvproxy — gvproxy only applies with
+  # the unixgram/socket network backend). DHCP inside the guest.
   networking.hostName = hostname;
   networking.useDHCP = lib.mkDefault true;
 
@@ -31,6 +39,16 @@
     "nix-command"
     "flakes"
   ];
+
+  # --- Slim profile (keep the throwaway VM small) -------------------------
+  zramSwap.enable = true; # compressed RAM swap instead of a disk swap device
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
+  nix.settings.auto-optimise-store = true;
+  documentation.enable = false; # drop man/info/nixos docs from the closure
 
   # --- Users --------------------------------------------------------------
   users.users.${userConfig.name} = {
