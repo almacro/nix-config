@@ -22,6 +22,13 @@
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    #  Let linux laptop follow NixOS
+    nixpkgs-nixos.url = "github:NixOS/nixpkgs/nixos-26.05";
+    home-manager-nixos = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs-nixos";
+    };
   };
 
   outputs =
@@ -30,6 +37,8 @@
       darwin,
       home-manager,
       nixpkgs,
+      nixpkgs-nixos,
+      home-manager-nixos,
       ...
     }@inputs:
     let
@@ -93,12 +102,12 @@
         };
 
       # Function for a NixOS configuration. Parameterised by `system` and the
-      # `nixpkgs` / `homeManager` inputs so ONE helper serves both this
-      # unstable aarch64-linux vfkit VM and a stable-input host (which passes
-      # its own stable inputs, e.g. nixpkgs = inputs.nixpkgs-nixos). Reuses the
-      # shared home-manager `common` module (darwin-only bits are isDarwin
-      # guarded). NOTE: building needs a builder for `system` — easiest is to
-      # run `nixos-rebuild switch --flake .#<host>` from INSIDE the guest.
+      # `nixpkgs` / `homeManager` inputs so ONE helper serves both the unstable
+      # aarch64-linux vfkit VM (helper defaults = the Mac inputs) and the stable
+      # x86_64-linux blackfish laptop (passes nixpkgs-nixos / home-manager-nixos).
+      # Reuses the shared home-manager `common` module (darwin-only bits are
+      # isDarwin guarded). NOTE: building needs a builder for `system` — easiest
+      # is to run `nixos-rebuild switch --flake .#<host>` from INSIDE the target.
       mkNixosConfiguration =
         {
           system,
@@ -137,15 +146,26 @@
       };
 
       nixosConfigurations = {
-        # Apple Silicon NixOS guest running under vfkit. Rename "nixvm" to taste
-        # (and rename hosts/nixvm + home/almacro/nixvm to match).
+        # Apple Silicon NixOS guest under vfkit — tracks unstable (helper
+        # defaults = the Mac inputs). Output name matches the hostname so
+        # `nixos-rebuild --flake .` works in-guest with no #name.
         "nixvm" = mkNixosConfiguration {
           system = "aarch64-linux";
           hostname = "nixvm";
           username = "almacro";
         };
+
+        # x86_64 Linux laptop on stable NixOS (nixos-26.05).
+        "blackfish" = mkNixosConfiguration {
+          system = "x86_64-linux";
+          hostname = "blackfish";
+          username = "almacro";
+          nixpkgs = nixpkgs-nixos;
+          homeManager = home-manager-nixos;
+        };
       };
 
       formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
     };
 }
