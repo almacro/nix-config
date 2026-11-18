@@ -101,28 +101,42 @@
           ];
         };
 
-    mkNixosConfiguration = hostname: username: system:
-      nixpkgs-nixos.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs outputs hostname;
-          userConfig = users.${username};
+      # Function for a NixOS configuration. Parameterised by `system` and the
+      # `nixpkgs` / `homeManager` inputs so ONE helper serves both the unstable
+      # aarch64-linux vfkit VM (helper defaults = the Mac inputs) and the stable
+      # x86_64-linux blackfish laptop (passes nixpkgs-nixos / home-manager-nixos).
+      # Reuses the shared home-manager `common` module (darwin-only bits are
+      # isDarwin guarded). NOTE: building needs a builder for `system` — easiest
+      # is to run `nixos-rebuild switch --flake .#<host>` from INSIDE the target.
+      mkNixosConfiguration =
+        {
+          system,
+          hostname,
+          username,
+          nixpkgs ? inputs.nixpkgs,
+          homeManager ? home-manager,
+        }:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs outputs hostname;
+            userConfig = users.${username};
+          };
+          modules = [
+            ./hosts/${hostname}
+            homeManager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = {
+                inherit inputs outputs;
+                userConfig = users.${username};
+                nhModules = "${self}/modules/home-manager";
+              };
+              home-manager.users.${username} = import ./home/${username}/${hostname};
+            }
+          ];
         };
-        modules = [
-          ./hosts/${hostname}
-          home-manager-nixos.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = {
-              inherit inputs outputs;
-              userConfig = users.${username};
-              nhModules = "${self}/modules/home-manager";
-            };
-            home-manager.users.${username} = import ./home/${username}/${hostname};
-          }
-        ];
-      };
 
     in
     {
@@ -131,11 +145,27 @@
         "Stellarbook" = mkDarwinConfiguration "Stellarbook" "almacro";
       };
 
+      nixosConfigurations = {
+        # Apple Silicon NixOS guest under vfkit — tracks unstable (helper
+        # defaults = the Mac inputs). Output name matches the hostname so
+        # `nixos-rebuild --flake .` works in-guest with no #name.
+        "nixvm" = mkNixosConfiguration {
+          system = "aarch64-linux";
+          hostname = "nixvm";
+          username = "almacro";
+        };
+
+        # x86_64 Linux laptop on stable NixOS (nixos-26.05).
+        "blackfish" = mkNixosConfiguration {
+          system = "x86_64-linux";
+          hostname = "blackfish";
+          username = "almacro";
+          nixpkgs = nixpkgs-nixos;
+          homeManager = home-manager-nixos;
+        };
+      };
+
       formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
-
-      nixosConfigurations.blackfish = mkNixosConfiguration "blackfish" "almacro" "x86_64-linux";
-
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
-
     };
 }
