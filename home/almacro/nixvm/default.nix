@@ -1,10 +1,11 @@
 { nhModules, ... }:
 {
   imports = [
-    "${nhModules}/common"
+    # Core only — the lean daily toolchain. Optional groups
+    # (modules/home-manager/groups/*) are intentionally NOT imported here;
+    # a future nixvm-fat can pull in whichever it needs.
+    "${nhModules}/core"
   ];
 
-  # VM-specific home packages / config go here. The shared `common` module
-  # already brings the cross-platform toolchain (its darwin-only bits are
-  # guarded by isDarwin, so they no-op on this Linux guest).
+  # VM-specific home packages / config go here.
 }
