@@ -155,6 +155,14 @@
           username = "almacro";
         };
 
+        "nixvm-stable" = mkNixosConfiguration {
+          system = "aarch64-linux";
+          hostname = "nixvm";
+          username = "almacro";
+          nixpkgs = inputs.nixpkgs-nixos;
+          homeManager = inputs.home-manager-nixos;
+        };
+
         # x86_64 Linux laptop on stable NixOS (nixos-26.05).
         "blackfish" = mkNixosConfiguration {
           system = "x86_64-linux";
