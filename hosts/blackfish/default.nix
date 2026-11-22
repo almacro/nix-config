@@ -10,6 +10,9 @@
   };
   boot.loader.efi.canTouchEfiVariables = true;
 
+  zramSwap.enable = true;
+  zramSwap.memoryPercent = 50;
+
   networking.hostName = hostname;          # "blackfish"
   networking.networkmanager.enable = true;
 
