@@ -38,6 +38,7 @@
   environment.systemPackages = with pkgs; [ vim git wget curl htop pkgs.sbctl ];
 
   services.openssh.enable = true;   # remove if you do not want inbound SSH
+  services.fwupd.enable = true;
 
   # Set once to the release you install; do not bump it on upgrades.
   system.stateVersion = "26.05";
