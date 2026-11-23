@@ -10,6 +10,10 @@
   };
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # tell the initrd to use the TPM
+  boot.initrd.systemd.enable = true;
+  boot.initrd.luks.devices."cryptroot".crypttabExtraOpts = [ "tpm2-device=auto" ];
+
   zramSwap.enable = true;
   zramSwap.memoryPercent = 50;
 
