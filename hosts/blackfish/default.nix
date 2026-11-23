@@ -1,4 +1,4 @@
-{ pkgs, lib, hostname, userConfig, inputs, ... }:
+{ inputs, pkgs, lib, hostname, userConfig, ... }:
 
 {
   imports = [ ./hardware-configuration.nix inputs.lanzaboote.nixosModules.lanzaboote ];
@@ -32,10 +32,18 @@
     description = userConfig.fullName;
     extraGroups = [ "wheel" "networkmanager" ];
   };
-
+ 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  environment.systemPackages = with pkgs; [ vim git wget curl htop pkgs.sbctl ];
+  environment.systemPackages = with pkgs; [ 
+    vim git wget curl htop 
+    pkgs.sbctl 
+    file          # identify file types
+    dmidecode     # firmware and DMI tables; needs sudo
+    pciutils      # provides lspci
+    lshw          # hardware listing; run with sudo for full detail
+    usbutils      # provides lsusb
+  ];
 
   services.openssh.enable = true;   # remove if you do not want inbound SSH
   services.fwupd.enable = true;
