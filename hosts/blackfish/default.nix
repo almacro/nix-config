@@ -1,12 +1,11 @@
-{ pkgs, lib, hostname, userConfig, ... }:
+{ pkgs, lib, hostname, userConfig, inputs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [ ./hardware-configuration.nix inputs.lanzaboote.nixosModules.lanzaboote ];
 
   # Bootloader: systemd-boot on the unencrypted ESP
   boot.loader.systemd-boot = {
-    enable = true;
-    configurationLimit = 10;     # keeps the ESP from filling with old generations
+    enable = lib.mkForce false;
   };
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -14,6 +13,11 @@
   boot.initrd.systemd.enable = true;
   boot.initrd.luks.devices."cryptroot".crypttabExtraOpts = [ "tpm2-device=auto" ];
 
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
+    configurationLimit = 10;     # keeps the ESP from filling with old generations
+  };
   zramSwap.enable = true;
   zramSwap.memoryPercent = 50;
 
@@ -31,7 +35,7 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  environment.systemPackages = with pkgs; [ vim git wget curl htop ];
+  environment.systemPackages = with pkgs; [ vim git wget curl htop pkgs.sbctl ];
 
   services.openssh.enable = true;   # remove if you do not want inbound SSH
 

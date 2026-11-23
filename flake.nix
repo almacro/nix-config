@@ -29,6 +29,11 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs-nixos";
     };
+
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.2.0";    # use the newest tag from the command above
+      inputs.nixpkgs.follows = "nixpkgs-nixos";
+    };
   };
 
   outputs =
