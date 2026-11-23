@@ -12,6 +12,7 @@
 
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "graphite-cli"
+    "graphite-cli-unwrapped"
     "surrealdb"
   ];
 }
