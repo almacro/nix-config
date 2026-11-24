@@ -11,6 +11,7 @@
     # Currently supplies (see overlayNewerPackages below):
     #   - mill 1.1.8  (main pin is 1.1.2)
     nixpkgs-newer.url = "github:NixOS/nixpkgs/c7def046b9a883d46974757852106483d741586f";
+    nixpkgs-prev.url = "github:NixOS/nixpkgs/4100e830e085863741bc69b156ec4ccd53ab5be0";   # the May unstable pin
 
     # Home manager
     home-manager = {
