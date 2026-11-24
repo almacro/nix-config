@@ -8,6 +8,7 @@
   imports = [
     ./system-defaults.nix
     ./homebrew.nix
+    ./overlays.nix
   ];
 
   # Determinate Nix manages nix itself; disable nix-darwin's nix management
