@@ -2,7 +2,7 @@
 {
   home.packages = with pkgs; [
     # Kubernetes
-    kubectl
+    (lib.hiPrio kubectl)
     kubernetes-helm
     minikube
     k9s
