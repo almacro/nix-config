@@ -9,9 +9,12 @@
     # of the main pin, without moving the whole system. Pinned to an explicit
     # commit (not a branch) so `nix flake update` does not drift it.
     # Currently supplies (see overlayNewerPackages below):
-    #   - mill 1.1.8  (main pin is 1.1.2)
+    #   - mill 1.3.1  (main pin is 1.1.2)
     nixpkgs-newer.url = "github:NixOS/nixpkgs/c7def046b9a883d46974757852106483d741586f";
-    nixpkgs-prev.url = "github:NixOS/nixpkgs/4100e830e085863741bc69b156ec4ccd53ab5be0";   # the May unstable pin
+
+    # nixpkgs-prev: the May 2026 unstable pin, used only on Stellarbook to keep
+    # surrealdb 2.6.1 and grafana-loki 3.7.2 from rebuilding (see hosts/Stellarbook/default.nix).
+    nixpkgs-prev.url = "github:NixOS/nixpkgs/4100e830e085863741bc69b156ec4ccd53ab5be0";
 
     # Home manager
     home-manager = {
