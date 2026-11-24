@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  options,
   userConfig,
   hostname,
   ...
@@ -39,14 +40,19 @@
   networking.useDHCP = lib.mkDefault true;
   # Advertise/resolve <hostname>.local over mDNS so the Mac can reach the VM
   # by name (nixvm.local) without it, that name won't resolve.
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    publish = {
-      enable = true;
-      addresses = true; # publish A/AAAA for <hostname>.local (workstation not needed)
-    };
-  };
+  services.avahi = lib.mkMerge [
+    { enable = true; nssmdns4 = true; }
+    (if options.services.avahi ? settings then {
+      # nixpkgs 26.11 and later
+      settings.publish = {
+        disable-publishing = false;
+        publish-addresses = true;       # publish A/AAAA for <hostname>.local
+      };
+    } else {
+      # nixpkgs 26.05 (stable): remove this branch once nixpkgs-nixos moves to 26.11
+      publish = { enable = true; addresses = true; };
+    })
+  ];
 
   # --- Nix ----------------------------------------------------------------
   nix.settings.experimental-features = [
