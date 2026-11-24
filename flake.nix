@@ -5,13 +5,6 @@
     # Nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    # Fixed-revision nixpkgs for surgically bumping individual packages ahead
-    # of the main pin, without moving the whole system. Pinned to an explicit
-    # commit (not a branch) so `nix flake update` does not drift it.
-    # Currently supplies (see overlayNewerPackages below):
-    #   - mill 1.3.1  (main pin is 1.1.2)
-    nixpkgs-newer.url = "github:NixOS/nixpkgs/c7def046b9a883d46974757852106483d741586f";
-
     # nixpkgs-prev: the May 2026 unstable pin, used only on Stellarbook to keep
     # surrealdb 2.6.1 and grafana-loki 3.7.2 from rebuilding (see hosts/Stellarbook/default.nix).
     nixpkgs-prev.url = "github:NixOS/nixpkgs/4100e830e085863741bc69b156ec4ccd53ab5be0";
@@ -73,16 +66,6 @@
 
       system = "aarch64-darwin";
 
-      # Surgical package pins: pull specific attrs from `nixpkgs-newer` so they
-      # land ahead of the main nixpkgs pin, with a blast radius of just these
-      # packages. Applied to the system pkgs, which home-manager reuses via
-      # useGlobalPkgs.
-      overlayNewerPackages = _final: _prev: {
-        inherit (inputs.nixpkgs-newer.legacyPackages.${system})
-          mill
-          ;
-      };
-
       # Function for nix-darwin system configuration
       mkDarwinConfiguration =
         hostname: username:
@@ -95,7 +78,6 @@
           };
           modules = [
             ./hosts/${hostname}
-            { nixpkgs.overlays = [ overlayNewerPackages ]; }
             home-manager.darwinModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
