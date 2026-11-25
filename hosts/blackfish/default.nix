@@ -50,6 +50,22 @@
     usbutils      # provides lsusb
   ];
 
+  services.power-profiles-daemon.enable = false;   # already false; stated so it stays that way
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_AC = "powersave";           # with amd-pstate-epp, the EPP does the work
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+      CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
+      CPU_BOOST_ON_AC = 1;
+      CPU_BOOST_ON_BAT = 1;
+      RUNTIME_PM_ON_BAT = "auto";
+      USB_AUTOSUSPEND = 1;
+      WIFI_PWR_ON_BAT = "off";                            # rtw88 Wi-Fi power saving can cause dropouts
+    };
+  };
+
   services.openssh.enable = true;   # remove if you do not want inbound SSH
   services.fwupd.enable = true;
 
