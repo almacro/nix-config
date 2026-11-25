@@ -111,7 +111,7 @@
       plugins = [ "git" ];
     };
 
-    plugins = [
+    plugins = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       {
         name = "powerlevel10k";
         src = pkgs.zsh-powerlevel10k;
@@ -119,16 +119,25 @@
       }
     ];
 
+    # Zsh extra init
+    initContent =
+      if pkgs.stdenv.hostPlatform.isLinux then ''
+        if [[ $TERM == linux ]]; then
+          # bare Linux console: no Nerd Font glyphs, so use a plain prompt
+          PROMPT='%F{green}%n@%m%f %F{blue}%~%f %# '
+        else
+          source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+          [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+        fi
+      '' else ''
+        [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+      '';
+
     # Login-shell setup (Homebrew + podman). Lands in the
     # home-manager-managed ~/.zprofile.
     profileExtra = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin ''
       eval "$(/opt/homebrew/bin/brew shellenv zsh)"
       export PATH=$PATH:/opt/podman/bin
-    '';
-
-    # Zsh extra init
-    initContent = ''
-      [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
     '';
   };
 
