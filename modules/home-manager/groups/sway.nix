@@ -1,5 +1,17 @@
 { lib, ... }:
 
+let
+  lock = "swaylock -f -c 000000";
+
+  # one line: lock after 5 min, screen off after 6, suspend after 15, and always lock before any sleep
+  idle = lib.concatStringsSep " " [
+    "swayidle -w"
+    "timeout 300 '${lock}'"
+    "timeout 360 'swaymsg \"output * power off\"' resume 'swaymsg \"output * power on\"'"
+    "timeout 900 'systemctl suspend'"
+    "before-sleep '${lock}'"
+  ];
+in
 {
   wayland.windowManager.sway = {
     enable = true;
@@ -11,7 +23,9 @@
       input."type:keyboard".xkb_options = "ctrl:nocaps";
       input."type:touchpad" = { tap = "enabled"; natural_scroll = "enabled"; };
       bars = [ { command = "waybar"; } ];
+      startup = [ { command = idle; } ];
       keybindings = lib.mkOptionDefault {
+        "Mod4+l"                = "exec ${lock}";
         "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
         "XF86MonBrightnessUp"   = "exec brightnessctl set 5%+";
         "XF86AudioMute"         = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
