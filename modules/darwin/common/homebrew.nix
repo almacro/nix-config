@@ -19,6 +19,7 @@
     casks = [
       "emacs-app"
       "firefox"
+      "font-symbols-only-nerd-font"    # Nerd Font glyphs for the Powerlevel10k prompt in terminals
       "iterm2"
       "krita"
       "tigervnc"
