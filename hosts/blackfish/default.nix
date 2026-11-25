@@ -67,6 +67,7 @@
   };
 
   services.openssh.enable = true;   # remove if you do not want inbound SSH
+  systemd.services.sshd.wantedBy = lib.mkForce [ ];   # no listener until you start it
   services.fwupd.enable = true;
 
   # Set once to the release you install; do not bump it on upgrades.
