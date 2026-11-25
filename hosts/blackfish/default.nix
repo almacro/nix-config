@@ -1,7 +1,12 @@
 { inputs, pkgs, lib, hostname, userConfig, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix inputs.lanzaboote.nixosModules.lanzaboote ];
+  imports = [
+    ./hardware-configuration.nix
+    inputs.lanzaboote.nixosModules.lanzaboote
+
+    ../../modules/nixos/sway.nix
+  ];
 
   # Bootloader: systemd-boot on the unencrypted ESP
   boot.loader.systemd-boot = {
