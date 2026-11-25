@@ -36,6 +36,7 @@
     isNormalUser = true;
     description = userConfig.fullName;
     extraGroups = [ "wheel" "networkmanager" ];
+    shell = pkgs.zsh;
   };
  
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -72,4 +73,6 @@
 
   # Set once to the release you install; do not bump it on upgrades.
   system.stateVersion = "26.05";
+
+  programs.zsh.enable = true;
 }
